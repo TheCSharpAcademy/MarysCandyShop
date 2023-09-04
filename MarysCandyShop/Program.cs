@@ -19,25 +19,28 @@ Console.WriteLine("Today's profit: " + todaysProfit + "$");
 Console.WriteLine("Today's target achieved: " + targetAchieved);
 Console.WriteLine(divide);
 Console.WriteLine(menu);
-Console.ReadLine();
 
-Console.WriteLine(divide);
-Console.WriteLine(divide);
+var usersChoice = Console.ReadLine().Trim().ToUpper();
 
-title = title.ToUpper();
-divide = divide.Insert(0, "#########");
-dateTime = dateTime.Date;
-daysSinceOpening = int.Parse("2");
-todaysProfit = 10.9m;
-targetAchieved = true;
+if (usersChoice == "A")
+{
+    Console.WriteLine("User chose A");
+} 
+else if (usersChoice == "D")
+{
+    Console.WriteLine("User chose D");
+} 
+else if (usersChoice == "V")
+{
+    Console.WriteLine("User chose V");
+}
+else if (usersChoice == "U")
+{
+    Console.WriteLine("User chose U");
+}
+else
+{
+    Console.WriteLine("Invalid choice. Please choose one of the above");
+}
 
-Console.WriteLine(title);
-Console.WriteLine(divide);
-Console.WriteLine("Today's date: " + dateTime);
-Console.WriteLine("Days since opening: " + daysSinceOpening);
-Console.WriteLine("Today's profit: " + todaysProfit + "$");
-Console.WriteLine("Today's target achieved: " + targetAchieved);
-Console.WriteLine(divide);
-Console.WriteLine(menu);
-Console.ReadLine();
 
