@@ -11,36 +11,34 @@ var menu = "Choose one option:\n"
     + 'D' + " to delete product\n"
     + 'U' + " to update product\n";
 
-Console.WriteLine(title);
-Console.WriteLine(divide);
-Console.WriteLine("Today's date: " + dateTime);
-Console.WriteLine("Days since opening: " + daysSinceOpening);
-Console.WriteLine("Today's profit: " + todaysProfit + "$");
-Console.WriteLine("Today's target achieved: " + targetAchieved);
-Console.WriteLine(divide);
-Console.WriteLine(menu);
+Console.WriteLine(@$"{title}
+{divide}
+Today's date: {dateTime}
+Days since opening: {daysSinceOpening}
+Today's profit: {todaysProfit}$
+Today's target achieved: {targetAchieved}
+{divide}
+{menu}");
 
 var usersChoice = Console.ReadLine().Trim().ToUpper();
 
-if (usersChoice == "A")
+switch (usersChoice)
 {
-    Console.WriteLine("User chose A");
-} 
-else if (usersChoice == "D")
-{
-    Console.WriteLine("User chose D");
-} 
-else if (usersChoice == "V")
-{
-    Console.WriteLine("User chose V");
-}
-else if (usersChoice == "U")
-{
-    Console.WriteLine("User chose U");
-}
-else
-{
-    Console.WriteLine("Invalid choice. Please choose one of the above");
+    case "A":
+        Console.WriteLine("User chose A");
+        break;
+    case "D":
+        Console.WriteLine("User chose D");
+        break;
+    case "V":
+        Console.WriteLine("User chose V");
+        break;
+    case "U":
+        Console.WriteLine("User chose U");
+        break;
+    default:
+        Console.WriteLine("Invalid choice. Please choose one of the above");
+        break;
 }
 
 
