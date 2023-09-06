@@ -10,12 +10,11 @@ while (isMenuRunning)
     Console.Clear();
 };
 
-void AddProduct(string message)
+void AddProduct()
 {
     Console.WriteLine("Product Name:");
     var product = Console.ReadLine();
     products.Add(product);
-    Console.WriteLine(message);
 }
 
 void DeleteProduct(string message)
@@ -70,7 +69,7 @@ void RunMenu()
     switch (usersChoice)
     {
         case "A":
-            AddProduct("User chose A");
+            AddProduct();
             break;
         case "D":
             DeleteProduct("User chose D");
