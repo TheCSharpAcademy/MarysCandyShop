@@ -27,10 +27,8 @@ void UpdateProduct(string message)
     Console.WriteLine(message);
 }
 
-void ViewProducts(string message)
-{
-    Console.WriteLine(message);
-}
+void ViewProducts()
+{}
 
 void PrintHeader()
 {
@@ -46,6 +44,7 @@ void PrintHeader()
 {divide}
 Today's date: {dateTime}
 Days since opening: {daysSinceOpening}
+Product Count: {products.Count}
 Today's profit: {todaysProfit}$
 Today's target achieved: {targetAchieved}
 {divide}
@@ -69,13 +68,13 @@ void RunMenu()
     switch (usersChoice)
     {
         case "A":
-            AddProduct();
+            AddProduct("User chose A");
             break;
         case "D":
             DeleteProduct("User chose D");
             break;
         case "V":
-            ViewProducts("User chose V");
+            ViewProducts();
             break;
         case "U":
             UpdateProduct("User chose U");
