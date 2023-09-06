@@ -28,7 +28,16 @@ void UpdateProduct(string message)
 }
 
 void ViewProducts()
-{}
+{
+    Console.WriteLine("\n------------");
+    var productIndex = 1;
+    foreach (var product in products)
+    {
+        Console.WriteLine($"{productIndex}: {product}");
+        productIndex++;
+    }
+    Console.WriteLine("------------\n");
+}
 
 void PrintHeader()
 {
@@ -68,7 +77,7 @@ void RunMenu()
     switch (usersChoice)
     {
         case "A":
-            AddProduct("User chose A");
+            AddProduct();
             break;
         case "D":
             DeleteProduct("User chose D");
