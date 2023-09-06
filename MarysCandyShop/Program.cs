@@ -1,4 +1,5 @@
 ﻿var isMenuRunning = true;
+var products = new List<string>();
 
 while (isMenuRunning)
 {
@@ -9,9 +10,11 @@ while (isMenuRunning)
     Console.Clear();
 };
 
-
 void AddProduct(string message)
 {
+    Console.WriteLine("Product Name:");
+    var product = Console.ReadLine();
+    products.Add(product);
     Console.WriteLine(message);
 }
 
