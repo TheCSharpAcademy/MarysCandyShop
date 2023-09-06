@@ -102,10 +102,24 @@ void RunMenu()
             break;
         case "Q":
             Console.WriteLine("Goodbye");
+            SaveProducts();
             isMenuRunning = false;
             break;
         default:
             Console.WriteLine("Invalid choice. Please choose one of the above");
             break;
     }
+}
+
+void SaveProducts()
+{
+    string docPath = @"C:\The.Csharp.School\MarysCandyShop\MarysCandyShop\history.txt";
+    using (StreamWriter outputFile = new StreamWriter(docPath))
+    {
+        foreach (string product in products)
+        {
+            outputFile.WriteLine(product);
+        }
+    }
+    Console.WriteLine("Products saved");
 }
