@@ -1,5 +1,9 @@
 ﻿var isMenuRunning = true;
 var products = new List<string>();
+string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
+
+
+SeedData();
 
 while (isMenuRunning)
 {
@@ -9,6 +13,16 @@ while (isMenuRunning)
     Console.ReadLine();
     Console.Clear();
 };
+
+void SeedData()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        Console.WriteLine(i);
+        products.Add(candyNames[i]);
+    }
+    Console.WriteLine("Data was seeded!\n\n");
+}
 
 void AddProduct()
 {
