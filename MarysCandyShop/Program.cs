@@ -25,20 +25,41 @@ var usersChoice = Console.ReadLine().Trim().ToUpper();
 switch (usersChoice)
 {
     case "A":
-        Console.WriteLine("User chose A");
+        AddProduct("User chose A");
         break;
     case "D":
-        Console.WriteLine("User chose D");
+        DeleteProduct("User chose D");
         break;
     case "V":
-        Console.WriteLine("User chose V");
+        ViewProducts("User chose V");
         break;
     case "U":
-        Console.WriteLine("User chose U");
+        UpdateProduct("User chose U");
         break;
     default:
         Console.WriteLine("Invalid choice. Please choose one of the above");
         break;
 }
+
+void AddProduct(string message)
+{
+    Console.WriteLine(message);
+}
+
+void DeleteProduct(string message)
+{
+    Console.WriteLine(message);
+}
+
+void UpdateProduct(string message)
+{
+    Console.WriteLine(message);
+}
+
+void ViewProducts(string message)
+{
+    Console.WriteLine(message);
+}
+
 
 
