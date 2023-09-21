@@ -1,24 +1,4 @@
-﻿ // Variables
-var title = "Mary's Candy Shop";
-var divide = "---------------------------------";
-var dateTime = DateTime.Now;
-var daysSinceOpening = 1;
-var todaysProfit = 5.5m;
-var targetAchieved = false;
-var menu = "Choose one option:\n"
-    + 'V' + " to view products\n"
-    + 'A' + " to add product\n"
-    + 'D' + " to delete product\n"
-    + 'U' + " to update product\n";
-
-Console.WriteLine(@$"{title}
-{divide}
-Today's date: {dateTime}
-Days since opening: {daysSinceOpening}
-Today's profit: {todaysProfit}$
-Today's target achieved: {targetAchieved}
-{divide}
-{menu}");
+﻿PrintHeader();
 
 var usersChoice = Console.ReadLine().Trim().ToUpper();
 
@@ -61,5 +41,39 @@ void ViewProducts(string message)
     Console.WriteLine(message);
 }
 
+void PrintHeader()
+{
+    var title = "Mary's Candy Shop";
+    var divide = "---------------------------------";
+    var dateTime = DateTime.Now;
+    var daysSinceOpening = GetDaysSinceOpening();
+    var todaysProfit = 5.5m;
+    var targetAchieved = false;
+    string menu = GetMenu();
 
+    Console.WriteLine(@$"{title}
+{divide}
+Today's date: {dateTime}
+Days since opening: {daysSinceOpening}
+Today's profit: {todaysProfit}$
+Today's target achieved: {targetAchieved}
+{divide}
+{menu}");
+}
 
+string GetMenu()
+{
+    return "Choose one option:\n"
+        + 'V' + " to view products\n"
+        + 'A' + " to add product\n"
+        + 'D' + " to delete product\n"
+        + 'U' + " to update product\n";
+}
+
+int GetDaysSinceOpening()
+{
+    var openingDate = new DateTime(2023, 1, 1);
+    var days = DateTime.Now - openingDate;
+
+    return days.Days;
+}
