@@ -4,15 +4,41 @@ var products = new List<string>();
 while (isMenuRunning)
 {
     PrintHeader();
-    RunMenu();
-    Console.WriteLine("Press Any Key To Go Back to Menu");
+
+    var usersChoice = Console.ReadLine().Trim().ToUpper();
+    var menuMessage = "Press Any Key To Go Back to Menu";
+
+    switch (usersChoice)
+    {
+        case "A":
+            AddProduct();
+            break;
+        case "D":
+            DeleteProduct("User chose D");
+            break;
+        case "V":
+            ViewProducts("User chose V");
+            break;
+        case "U":
+            UpdateProduct("User chose U");
+            break;
+        case "Q":
+            menuMessage = "Goodbye";
+            isMenuRunning = false;
+            break;
+        default:
+            Console.WriteLine("Invalid choice. Please choose one of the above");
+            break;
+    }
+
+    Console.WriteLine(menuMessage);
     Console.ReadLine();
     Console.Clear();
-};
+}
 
 void AddProduct()
 {
-    Console.WriteLine("Product Name:");
+    Console.WriteLine("Product name:");
     var product = Console.ReadLine();
     products.Add(product);
 }
@@ -27,15 +53,17 @@ void UpdateProduct(string message)
     Console.WriteLine(message);
 }
 
-void ViewProducts()
-{}
+void ViewProducts(string message)
+{
+    Console.WriteLine(message);
+}
 
 void PrintHeader()
 {
     var title = "Mary's Candy Shop";
     var divide = "---------------------------------";
     var dateTime = DateTime.Now;
-    var daysSinceOpening = 1;
+    var daysSinceOpening = GetDaysSinceOpening();
     var todaysProfit = 5.5m;
     var targetAchieved = false;
     string menu = GetMenu();
@@ -44,7 +72,6 @@ void PrintHeader()
 {divide}
 Today's date: {dateTime}
 Days since opening: {daysSinceOpening}
-Product Count: {products.Count}
 Today's profit: {todaysProfit}$
 Today's target achieved: {targetAchieved}
 {divide}
@@ -58,33 +85,13 @@ string GetMenu()
         + 'A' + " to add product\n"
         + 'D' + " to delete product\n"
         + 'U' + " to update product\n"
-        + 'Q' + " to quit program\n";
+        + 'Q' + " to quit the program\n";
 }
 
-void RunMenu()
+int GetDaysSinceOpening()
 {
-    var usersChoice = Console.ReadLine().Trim().ToUpper();
+    var openingDate = new DateTime(2023, 1, 1);
+    var days = DateTime.Now - openingDate;
 
-    switch (usersChoice)
-    {
-        case "A":
-            AddProduct("User chose A");
-            break;
-        case "D":
-            DeleteProduct("User chose D");
-            break;
-        case "V":
-            ViewProducts();
-            break;
-        case "U":
-            UpdateProduct("User chose U");
-            break;
-        case "Q":
-            Console.WriteLine("Goodbye");
-            isMenuRunning = false;
-            break;
-        default:
-            Console.WriteLine("Invalid choice. Please choose one of the above");
-            break;
-    }
+    return days.Days;
 }
