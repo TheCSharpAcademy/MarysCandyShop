@@ -1,7 +1,9 @@
 ﻿string docPath = @"C:\The.Csharp.School\MarysCandyShop\MarysCandyShop\history.txt";
 
 string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
-var products = new List<string>();
+
+var products = new Dictionary<int, string>();
+
 SeedData();
 
 var divide = "---------------------------------";
@@ -48,7 +50,7 @@ void SeedData()
 {
     for (int i = 0; i < candyNames.Length; i++)
     {
-        products.Add(candyNames[i]);
+        products.Add(i + 1, candyNames[i]);
     }
 }
 
@@ -56,7 +58,8 @@ void AddProduct()
 {
     Console.WriteLine("Product name:");
     var product = Console.ReadLine();
-    products.Add(product);
+    var index = products.Count();
+    products.Add(index, product);
 }
 
 void DeleteProduct(string message)
@@ -74,7 +77,7 @@ void ViewProducts()
     Console.WriteLine(divide);
     foreach (var product in products)
     {
-        Console.WriteLine($"{product}");
+        Console.WriteLine($"{product.Key}: {product.Value}");
     }
     Console.WriteLine(divide);
 }
@@ -121,7 +124,7 @@ void SaveProducts()
 {
     using (StreamWriter outputFile = new StreamWriter(docPath))
     {
-        foreach (string product in products)
+        foreach (var product in products)
         {
             outputFile.WriteLine(product);
         }
