@@ -1,4 +1,6 @@
-﻿string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
+﻿string docPath = @"C:\The.Csharp.School\MarysCandyShop\MarysCandyShop\history.txt";
+
+string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
 var products = new List<string>();
 SeedData();
 
@@ -29,6 +31,7 @@ while (isMenuRunning)
             break;
         case "Q":
             menuMessage = "Goodbye";
+            SaveProducts();
             isMenuRunning = false;
             break;
         default:
@@ -112,4 +115,16 @@ int GetDaysSinceOpening()
     var days = DateTime.Now - openingDate;
 
     return days.Days;
+}
+
+void SaveProducts()
+{
+    using (StreamWriter outputFile = new StreamWriter(docPath))
+    {
+        foreach (string product in products)
+        {
+            outputFile.WriteLine(product);
+        }
+    }
+    Console.WriteLine("Products saved");
 }
