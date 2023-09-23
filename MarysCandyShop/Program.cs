@@ -1,7 +1,10 @@
-﻿var divide = "---------------------------------";
+﻿string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
+var products = new List<string>();
+SeedData();
+
+var divide = "---------------------------------";
 
 var isMenuRunning = true;
-var products = new List<string>();
 
 while (isMenuRunning)
 {
@@ -36,6 +39,14 @@ while (isMenuRunning)
     Console.WriteLine(menuMessage);
     Console.ReadLine();
     Console.Clear();
+}
+
+void SeedData()
+{
+    for (int i = 0; i < candyNames.Length; i++)
+    {
+        products.Add(candyNames[i]);
+    }
 }
 
 void AddProduct()
