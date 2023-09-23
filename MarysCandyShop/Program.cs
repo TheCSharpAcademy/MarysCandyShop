@@ -1,78 +1,14 @@
-﻿var isMenuRunning = true;
+﻿var divide = "---------------------------------";
+
+var isMenuRunning = true;
 var products = new List<string>();
 
 while (isMenuRunning)
 {
     PrintHeader();
-    RunMenu();
-    Console.WriteLine("Press Any Key To Go Back to Menu");
-    Console.ReadLine();
-    Console.Clear();
-};
 
-void AddProduct()
-{
-    Console.WriteLine("Product Name:");
-    var product = Console.ReadLine();
-    products.Add(product);
-}
-
-void DeleteProduct(string message)
-{
-    Console.WriteLine(message);
-}
-
-void UpdateProduct(string message)
-{
-    Console.WriteLine(message);
-}
-
-void ViewProducts()
-{
-    Console.WriteLine("\n------------");
-    var productIndex = 1;
-    foreach (var product in products)
-    {
-        Console.WriteLine($"{productIndex}: {product}");
-        productIndex++;
-    }
-    Console.WriteLine("------------\n");
-}
-
-void PrintHeader()
-{
-    var title = "Mary's Candy Shop";
-    var divide = "---------------------------------";
-    var dateTime = DateTime.Now;
-    var daysSinceOpening = 1;
-    var todaysProfit = 5.5m;
-    var targetAchieved = false;
-    string menu = GetMenu();
-
-    Console.WriteLine(@$"{title}
-{divide}
-Today's date: {dateTime}
-Days since opening: {daysSinceOpening}
-Product Count: {products.Count}
-Today's profit: {todaysProfit}$
-Today's target achieved: {targetAchieved}
-{divide}
-{menu}");
-}
-
-string GetMenu()
-{
-    return "Choose one option:\n"
-        + 'V' + " to view products\n"
-        + 'A' + " to add product\n"
-        + 'D' + " to delete product\n"
-        + 'U' + " to update product\n"
-        + 'Q' + " to quit program\n";
-}
-
-void RunMenu()
-{
     var usersChoice = Console.ReadLine().Trim().ToUpper();
+    var menuMessage = "Press Any Key To Go Back to Menu";
 
     switch (usersChoice)
     {
@@ -89,11 +25,80 @@ void RunMenu()
             UpdateProduct("User chose U");
             break;
         case "Q":
-            Console.WriteLine("Goodbye");
+            menuMessage = "Goodbye";
             isMenuRunning = false;
             break;
         default:
             Console.WriteLine("Invalid choice. Please choose one of the above");
             break;
     }
+
+    Console.WriteLine(menuMessage);
+    Console.ReadLine();
+    Console.Clear();
+}
+
+void AddProduct()
+{
+    Console.WriteLine("Product name:");
+    var product = Console.ReadLine();
+    products.Add(product);
+}
+
+void DeleteProduct(string message)
+{
+    Console.WriteLine(message);
+}
+
+void UpdateProduct(string message)
+{
+    Console.WriteLine(message);
+}
+
+void ViewProducts()
+{
+    Console.WriteLine(divide);
+    foreach (var product in products)
+    {
+        Console.WriteLine($"{product}");
+    }
+    Console.WriteLine(divide);
+}
+
+void PrintHeader()
+{
+    var title = "Mary's Candy Shop";
+    var divide = "---------------------------------";
+    var dateTime = DateTime.Now;
+    var daysSinceOpening = GetDaysSinceOpening();
+    var todaysProfit = 5.5m;
+    var targetAchieved = false;
+    string menu = GetMenu();
+
+    Console.WriteLine(@$"{title}
+{divide}
+Today's date: {dateTime}
+Days since opening: {daysSinceOpening}
+Today's profit: {todaysProfit}$
+Today's target achieved: {targetAchieved}
+{divide}
+{menu}");
+}
+
+string GetMenu()
+{
+    return "Choose one option:\n"
+        + 'V' + " to view products\n"
+        + 'A' + " to add product\n"
+        + 'D' + " to delete product\n"
+        + 'U' + " to update product\n"
+        + 'Q' + " to quit the program\n";
+}
+
+int GetDaysSinceOpening()
+{
+    var openingDate = new DateTime(2023, 1, 1);
+    var days = DateTime.Now - openingDate;
+
+    return days.Days;
 }
