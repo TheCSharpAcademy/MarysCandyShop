@@ -1,17 +1,20 @@
-﻿string docPath = @"C:\The.Csharp.School\MarysCandyShop\MarysCandyShop\history.txt";
+﻿string docPath = @"C:\The.Cshasrp.School\MarysCandyShop\MarysCandyShop\history.txt";
 
 string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
 
 var products = new Dictionary<int, string>();
 
+var divide = "---------------------------------";
+
+
 //SeedData();
 
-if (File.Exists(docPath))
-{
-    LoadData();
-}
+//if (File.Exists(docPath))
+//{
+//    LoadData();
+//}
 
-var divide = "---------------------------------";
+LoadData();
 
 var isMenuRunning = true;
 
@@ -35,6 +38,9 @@ while (isMenuRunning)
             break;
         case "U":
             UpdateProduct("User chose U");
+            break;
+        case "S":
+            SaveProducts();
             break;
         case "Q":
             menuMessage = "Goodbye";
@@ -127,27 +133,54 @@ int GetDaysSinceOpening()
 
 void SaveProducts()
 {
-    using (StreamWriter outputFile = new StreamWriter(docPath))
+    try
     {
-        foreach (KeyValuePair<int, string> product in products)
+        using (StreamWriter outputFile = new StreamWriter(docPath))
         {
-            outputFile.WriteLine($"{product.Key}, {product.Value}");
+            foreach (KeyValuePair<int, string> product in products)
+            {
+                outputFile.WriteLine($"{product.Key}, {product.Value}");
+            }
         }
+        Console.WriteLine("Products saved");
     }
-    Console.WriteLine("Products saved");
+    catch (Exception e){
+
+        Console.WriteLine("There was an error saving products: " +  e.Message);
+        
+    }
 }
 
 void LoadData()
 {
-    using (StreamReader reader = new(docPath))
+    //using (StreamReader reader = new(docPath))
+    //{
+    //    var line = reader.ReadLine();
+    //    string[] parts = line.Split(',');
+
+    //    while (line!= null)
+    //    {
+    //        products.Add(int.Parse(parts[0]), parts[1]);
+    //        line = reader.ReadLine();
+    //    }
+    //}
+
+    try
     {
+        StreamReader reader = new(docPath);
+
         var line = reader.ReadLine();
         string[] parts = line.Split(',');
 
-        while (line!= null)
+        while (line != null)
         {
             products.Add(int.Parse(parts[0]), parts[1]);
             line = reader.ReadLine();
         }
+    } 
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        Console.WriteLine(divide);
     }
 }
