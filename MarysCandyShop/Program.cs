@@ -4,14 +4,14 @@ string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caram
 
 var products = new Dictionary<int, string>();
 
-//SeedData();
+var divide = "---------------------------------";
+
+// SeedData();
 
 if (File.Exists(docPath))
 {
     LoadData();
 }
-
-var divide = "---------------------------------";
 
 var isMenuRunning = true;
 
@@ -64,7 +64,7 @@ void AddProduct()
     Console.WriteLine("Product name:");
     var product = Console.ReadLine();
     var index = products.Count();
-    products.Add(index, product);
+    products.Add(index, product.Trim());
 }
 
 void DeleteProduct(string message)
@@ -129,7 +129,7 @@ void SaveProducts()
 {
     using (StreamWriter outputFile = new StreamWriter(docPath))
     {
-        foreach (KeyValuePair<int, string> product in products)
+        foreach (var product in products)
         {
             outputFile.WriteLine($"{product.Key}, {product.Value}");
         }
@@ -142,10 +142,10 @@ void LoadData()
     using (StreamReader reader = new(docPath))
     {
         var line = reader.ReadLine();
-        string[] parts = line.Split(',');
 
-        while (line!= null)
+        while (line != null)
         {
+            string[] parts = line.Split(',');
             products.Add(int.Parse(parts[0]), parts[1]);
             line = reader.ReadLine();
         }
