@@ -147,6 +147,7 @@ void LoadData()
         while (line!= null)
         {
             products.Add(int.Parse(parts[0]), parts[1]);
+            line = reader.ReadLine();
         }
     }
 }
