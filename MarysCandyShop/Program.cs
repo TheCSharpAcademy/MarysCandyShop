@@ -1,4 +1,4 @@
-﻿string docPath = @"C:\The.Cshasrp.School\MarysCandyShop\MarysCandyShop\history.txt";
+﻿string docPath = @"C:\The.Csharp.School\MarysCanddyShop\MarysCandyShop\history.txt";
 
 string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
 
@@ -6,8 +6,7 @@ var products = new Dictionary<int, string>();
 
 var divide = "---------------------------------";
 
-
-//SeedData();
+// SeedData();
 
 //if (File.Exists(docPath))
 //{
@@ -39,9 +38,6 @@ while (isMenuRunning)
         case "U":
             UpdateProduct("User chose U");
             break;
-        case "S":
-            SaveProducts();
-            break;
         case "Q":
             menuMessage = "Goodbye";
             SaveProducts();
@@ -70,7 +66,7 @@ void AddProduct()
     Console.WriteLine("Product name:");
     var product = Console.ReadLine();
     var index = products.Count();
-    products.Add(index, product);
+    products.Add(index, product.Trim());
 }
 
 void DeleteProduct(string message)
@@ -144,40 +140,28 @@ void SaveProducts()
         }
         Console.WriteLine("Products saved");
     }
-    catch (Exception e){
-
-        Console.WriteLine("There was an error saving products: " +  e.Message);
-        
+    catch (Exception ex)
+    {
+        Console.WriteLine("There was an error saving products: " + ex.Message);
     }
 }
 
 void LoadData()
 {
-    //using (StreamReader reader = new(docPath))
-    //{
-    //    var line = reader.ReadLine();
-    //    string[] parts = line.Split(',');
-
-    //    while (line!= null)
-    //    {
-    //        products.Add(int.Parse(parts[0]), parts[1]);
-    //        line = reader.ReadLine();
-    //    }
-    //}
-
     try
     {
-        StreamReader reader = new(docPath);
-
-        var line = reader.ReadLine();
-        string[] parts = line.Split(',');
-
-        while (line != null)
+        using (StreamReader reader = new(docPath))
         {
-            products.Add(int.Parse(parts[0]), parts[1]);
-            line = reader.ReadLine();
+            var line = reader.ReadLine();
+
+            while (line != null)
+            {
+                string[] parts = line.Split(',');
+                products.Add(int.Parse(parts[0]), parts[1]);
+                line = reader.ReadLine();
+            }
         }
-    } 
+    }
     catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
