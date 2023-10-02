@@ -1,4 +1,4 @@
-﻿string docPath = @"C:\The.Csharp.School\MarysCanddyShop\MarysCandyShop\history.txt";
+﻿using MarysCandyShop;
 
 string[] candyNames = { "Rainbow Lollipops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
 
@@ -131,7 +131,7 @@ void SaveProducts()
 {
     try
     {
-        using (StreamWriter outputFile = new StreamWriter(docPath))
+        using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
         {
             foreach (KeyValuePair<int, string> product in products)
             {
@@ -150,7 +150,7 @@ void LoadData()
 {
     try
     {
-        using (StreamReader reader = new(docPath))
+        using (StreamReader reader = new(Configuration.docPath))
         {
             var line = reader.ReadLine();
 
