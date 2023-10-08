@@ -2,3 +2,5 @@
 
 UserInterface.RunMainMenu();
 
+Console.WriteLine();
+
