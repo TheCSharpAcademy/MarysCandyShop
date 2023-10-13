@@ -1,4 +1,6 @@
-﻿namespace MarysCandyShop;
+﻿using System.Text;
+
+namespace MarysCandyShop;
 
 internal class ProductsController
 {
@@ -10,6 +12,7 @@ internal class ProductsController
         {
             using (StreamReader reader = new(Configuration.docPath))
             {
+                reader.ReadLine(); //discard first line
                 var line = reader.ReadLine();
 
                 while (line != null)
@@ -46,9 +49,15 @@ internal class ProductsController
         var price = decimal.Parse(Console.ReadLine());
         try
         {
-            using (StreamWriter outputFile = new StreamWriter(Configuration.docPath, true))
+            using (StreamWriter outputFile = new StreamWriter(Configuration.docPath, true, new UTF8Encoding(false)))
             {
-                    outputFile.WriteLine($"{id},{name},{price}");
+                if( outputFile.BaseStream.Length <= 3)
+                {
+                    outputFile.WriteLine("Id,Name,Price");
+                }
+
+                var csvLine = $"{id},{name},{price}";
+                outputFile.WriteLine(csvLine);
             }
             Console.WriteLine("Product saved");
         }

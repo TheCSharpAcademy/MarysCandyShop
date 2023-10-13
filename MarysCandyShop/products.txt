@@ -1,3 +1,0 @@
-1,Chocolate Tart,19.5
-1,Strawberry Jelly,19.5
-2,Chocolate Mousse,9
