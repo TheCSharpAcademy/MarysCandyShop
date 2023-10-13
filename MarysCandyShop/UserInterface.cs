@@ -1,4 +1,7 @@
-﻿namespace MarysCandyShop;
+﻿using Spectre.Console;
+using static MarysCandyShop.Enums;
+
+namespace MarysCandyShop;
 
 internal static class UserInterface
 {
@@ -14,25 +17,35 @@ internal static class UserInterface
         {
             PrintHeader();
 
-            var usersChoice = Console.ReadLine().Trim().ToUpper();
+            var usersChoice = AnsiConsole.Prompt(
+                new SelectionPrompt<MainMenuOptions>()
+                 .Title("What would you like to do?")
+            .AddChoices(
+                MainMenuOptions.ViewProducts,
+                MainMenuOptions.AddProduct,
+                MainMenuOptions.DeleteProduct,
+                MainMenuOptions.UpdateProduct,
+                MainMenuOptions.QuitProgram)
+                );
+
             var menuMessage = "Press Any Key To Go Back to Menu";
 
             switch (usersChoice)
             {
-                case "A":
+                case MainMenuOptions.AddProduct:
                     productsController.AddProduct();
                     break;
-                case "D":
+                case MainMenuOptions.DeleteProduct:
                     productsController.DeleteProduct("User chose D");
                     break;
-                case "V":
+                case MainMenuOptions.ViewProducts:
                     var products = productsController.GetProducts();
                     ViewProducts(products);
                     break;
-                case "U":
+                case MainMenuOptions.UpdateProduct:
                     productsController.UpdateProduct("User chose U");
                     break;
-                case "Q":
+                case MainMenuOptions.QuitProgram:
                     menuMessage = "Goodbye";
                     isMenuRunning = false;
                     break;
@@ -65,7 +78,6 @@ internal static class UserInterface
         var daysSinceOpening = Helpers.GetDaysSinceOpening();
         var todaysProfit = 5.5m;
         var targetAchieved = false;
-        string menu = GetMenu();
 
         Console.WriteLine(@$"{title}
 {divide}
@@ -73,17 +85,8 @@ Today's date: {dateTime}
 Days since opening: {daysSinceOpening}
 Today's profit: {todaysProfit}$
 Today's target achieved: {targetAchieved}
-{divide}
-{menu}");
+{divide}");
     }
 
-    private static string GetMenu()
-    {
-        return "Choose one option:\n"
-            + 'V' + " to view products\n"
-            + 'A' + " to add product\n"
-            + 'D' + " to delete product\n"
-            + 'U' + " to update product\n"
-            + 'Q' + " to quit the program\n";
-    }
+   
 }
