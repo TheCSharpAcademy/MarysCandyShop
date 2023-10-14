@@ -10,4 +10,10 @@ internal class Enums
         UpdateProduct,
         QuitProgram
     }
+
+    internal enum ProductType
+    {
+        ChocolateBar,
+        Lollipop
+    }
 }

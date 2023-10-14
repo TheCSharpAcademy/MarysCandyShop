@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static MarysCandyShop.Enums;
 
 namespace MarysCandyShop;
 
@@ -19,11 +20,22 @@ internal class ProductsController
                 {
                     string[] parts = line.Split(',');
 
-                    var product = new Product(int.Parse(parts[0]));
-                    product.Name = parts[1];
-                    product.Price = decimal.Parse(parts[2]);
-
-                    products.Add(product);
+                    if (int.Parse(parts[1]) == (int)ProductType.ChocolateBar)
+                    {
+                        var product = new ChocolateBar(int.Parse(parts[0]));
+                        product.Name = parts[2];
+                        product.Price = decimal.Parse(parts[3]);
+                        product.CocoaPercentage = int.Parse(parts[4]);
+                        products.Add(product);
+                    }
+                    else
+                    {
+                        var product = new Lollipop(int.Parse(parts[0]));
+                        product.Name = parts[2];
+                        product.Price = decimal.Parse(parts[3]);
+                        product.Shape = parts[5];
+                        products.Add(product);
+                    }
 
                     line = reader.ReadLine();
                 }
@@ -38,25 +50,20 @@ internal class ProductsController
         return products;
     }
 
-    internal void AddProduct()
+    internal void AddProduct(Product product)
     {
         var id = GetProducts().Count;
 
-        Console.WriteLine("Product name:");
-        var name = Console.ReadLine();
-
-        Console.WriteLine("Product price:");
-        var price = decimal.Parse(Console.ReadLine());
         try
         {
             using (StreamWriter outputFile = new StreamWriter(Configuration.docPath, true, new UTF8Encoding(false)))
             {
                 if( outputFile.BaseStream.Length <= 3)
                 {
-                    outputFile.WriteLine("Id,Name,Price");
+                    outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
                 }
 
-                var csvLine = $"{id},{name},{price}";
+                var csvLine = $"{product.GetProductForCsv(id)}";
                 outputFile.WriteLine(csvLine);
             }
             Console.WriteLine("Product saved");
