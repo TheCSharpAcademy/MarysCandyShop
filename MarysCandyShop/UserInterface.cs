@@ -33,7 +33,8 @@ internal static class UserInterface
             switch (usersChoice)
             {
                 case MainMenuOptions.AddProduct:
-                    productsController.AddProduct();
+                    var product = GetProductInput();
+                    productsController.AddProduct(product);
                     break;
                 case MainMenuOptions.DeleteProduct:
                     productsController.DeleteProduct("User chose D");
@@ -65,7 +66,7 @@ internal static class UserInterface
         Console.WriteLine(divide);
         foreach (var product in products)
         {
-            Console.WriteLine($"{product.Id}, {product.Name}, {product.Price}");
+            Console.WriteLine(product.GetProductForCsv(product.Id));
         }
         Console.WriteLine(divide);
     }
@@ -88,5 +89,43 @@ Today's target achieved: {targetAchieved}
 {divide}");
     }
 
-   
+    private static Product GetProductInput()
+    {
+        Console.WriteLine("Product name:");
+        var name = Console.ReadLine();
+
+        Console.WriteLine("Product price:");
+        var price = decimal.Parse(Console.ReadLine());
+
+        var type = AnsiConsole.Prompt(
+            new SelectionPrompt<ProductType>()
+            .Title("Product Type:")
+            .AddChoices(
+                ProductType.Lollipop,
+                ProductType.ChocolateBar)
+            );
+
+        if (type == ProductType.ChocolateBar)
+        {
+            Console.WriteLine("Cocoa %");
+            var cocoa = int.Parse(Console.ReadLine());
+
+            return new ChocolateBar()
+            {
+                Name = name,
+                Price = price,
+                CocoaPercentage = cocoa
+            };
+        }
+
+        Console.WriteLine("Shape: ");
+        var shape = Console.ReadLine();
+
+        return new Lollipop
+        {
+            Name = name,
+            Price = price,
+            Shape = shape
+        };
+    }
 }

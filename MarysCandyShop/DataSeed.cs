@@ -2,25 +2,75 @@
 
 internal class DataSeed
 {
-    string[] candyNames = { "Candy Lollypops", "Cotton Candy Clouds", "Choco-Caramel Delights", "Gummy Bear Bonanza", "Minty Chocolate Truffles", "Jellybean Jamboree", "Fruity Taffy Twists", "Sour Patch Surprise", "Crispy Peanut Butter Cups", "Rock Candy Crystals" };
-
-    void SeedData()
+    internal static void SeedData()
     {
-        var products = new List<Product>
-        {
-            new Product(1) { Name = candyNames[0], Price = 10m },
-            new Product(2) { Name = candyNames[1], Price = 10m },
-            new Product(3) { Name = candyNames[2], Price = 10m },
-            new Product(4) { Name = candyNames[3], Price = 10m },
-            new Product(5) { Name = candyNames[4], Price = 10m },
-            new Product(6) { Name = candyNames[5], Price = 10m },
-            new Product(7) { Name = candyNames[6], Price = 10m },
-            new Product(8) { Name = candyNames[7], Price = 10m },
-            new Product(9) { Name = candyNames[8], Price = 10m },
-            new Product(10) { Name = candyNames[9], Price = 10m },
-        };
         var productsController = new ProductsController();
 
-        productsController.AddProducts(products);
+        List<Product> productList = new List<Product>
+        {
+            new ChocolateBar(1)
+            {
+                Name = "Milk Chocolate Bar",
+                Price = 1.99m,
+                CocoaPercentage = 35
+            },
+            new ChocolateBar(2)
+            {
+                Name = "Dark Chocolate Bar",
+                Price = 2.49m,
+                CocoaPercentage = 70
+            },
+            new ChocolateBar(3)
+            {
+                Name = "Hazelnut Chocolate Bar",
+                Price = 2.99m,
+                CocoaPercentage = 50
+            },
+            new ChocolateBar(4)
+            {
+                Name = "White Chocolate Bar",
+                Price = 1.79m,
+                CocoaPercentage = 0
+            },
+            new ChocolateBar(5)
+            {
+                Name = "Caramel Chocolate Bar",
+                Price = 2.29m,
+                CocoaPercentage = 30
+            },
+            new Lollipop(6)
+            {
+                Name = "Strawberry Lollipop",
+                Price = 0.99m,
+                Shape = "Round"
+            },
+            new Lollipop(7)
+            {
+                Name = "Grape Lollipop",
+                Price = 0.99m,
+                Shape = "Heart"
+            },
+            new Lollipop(8)
+            {
+                Name = "Blueberry Lollipop",
+                Price = 0.99m,
+                Shape = "Star"
+            },
+            new Lollipop(9)
+            {
+                Name = "Orange Lollipop",
+                Price = 0.99m,
+                Shape = "Round"
+            },
+            new Lollipop(10)
+            {
+                Name = "Watermelon Lollipop",
+                Price = 0.99m,
+                Shape = "Fish"
+            }
+        };
+
+        productsController.AddProducts(productList);
+
     }
 }
