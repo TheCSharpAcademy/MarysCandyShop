@@ -1,4 +1,6 @@
-﻿namespace MarysCandyShop;
+﻿using static MarysCandyShop.Product;
+
+namespace MarysCandyShop;
 
 internal class DataSeed
 {

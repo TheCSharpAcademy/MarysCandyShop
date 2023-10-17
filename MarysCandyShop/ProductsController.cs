@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using static MarysCandyShop.Enums;
+using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
 
@@ -64,7 +65,7 @@ internal class ProductsController
                     outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
                 }
 
-                var csvLine = product.GetProductForCsv(id);
+                var csvLine = product.GetProductForCsv();
 
                 outputFile.WriteLine(csvLine);
             }
@@ -88,7 +89,7 @@ internal class ProductsController
                 }
                 foreach (var product in products)
                 {
-                    var csvLine = product.GetProductForCsv(product.Id);
+                    var csvLine = product.GetProductForCsv();
 
                     outputFile.WriteLine(csvLine);
                 }

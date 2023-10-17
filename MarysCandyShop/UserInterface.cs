@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using static MarysCandyShop.Enums;
+using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
 
@@ -45,7 +46,8 @@ internal static class UserInterface
                     ViewProducts(products);
                     break;
                 case MainMenuOptions.ViewSingleProduct:
-                    var productId = GetProductIdInput();
+                    var productChoice = GetProductIdInput();
+                    ViewProduct(productChoice);
                     break;
                 case MainMenuOptions.UpdateProduct:
                     productsController.UpdateProduct("User chose U");
@@ -70,9 +72,22 @@ internal static class UserInterface
         Console.WriteLine(divide);
         foreach (var product in products)
         {
-            Console.WriteLine(product.GetProductForCsv(product.Id));
+            Console.WriteLine(product.GetProductForCsv());
         }
         Console.WriteLine(divide);
+    }
+
+    internal static void ViewProduct(Product product)
+    {
+        var panel = new Panel(product.GetProductForPanel());
+        panel.Header = new PanelHeader("Product Info");
+        panel.Padding = new Padding(2, 2, 2, 2);
+
+        AnsiConsole.Write(panel);
+
+        Console.WriteLine("Press Any Key to Return to Menu");
+        Console.ReadLine();
+        Console.Clear();
     }
 
     internal static void PrintHeader()
@@ -133,7 +148,7 @@ Today's target achieved: {targetAchieved}
         };
     }
 
-    private static int GetProductIdInput() 
+    private static Product GetProductIdInput() 
     {
         var productsController = new ProductsController();
 
@@ -142,9 +157,8 @@ Today's target achieved: {targetAchieved}
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Choose Product")
             .AddChoices(productsArray));
-        var id = products.Single(x => x.Name == option).Id;
+        var product = products.Single(x => x.Name == option);
 
-        return id;
-        
+        return product;     
     }
 }
