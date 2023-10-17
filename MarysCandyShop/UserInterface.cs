@@ -21,7 +21,8 @@ internal static class UserInterface
                 new SelectionPrompt<MainMenuOptions>()
                  .Title("What would you like to do?")
             .AddChoices(
-                MainMenuOptions.ViewProducts,
+                MainMenuOptions.ViewProductsList,
+                MainMenuOptions.ViewSingleProduct,
                 MainMenuOptions.AddProduct,
                 MainMenuOptions.DeleteProduct,
                 MainMenuOptions.UpdateProduct,
@@ -39,9 +40,12 @@ internal static class UserInterface
                 case MainMenuOptions.DeleteProduct:
                     productsController.DeleteProduct("User chose D");
                     break;
-                case MainMenuOptions.ViewProducts:
+                case MainMenuOptions.ViewProductsList:
                     var products = productsController.GetProducts();
                     ViewProducts(products);
+                    break;
+                case MainMenuOptions.ViewSingleProduct:
+                    var productId = GetProductIdInput();
                     break;
                 case MainMenuOptions.UpdateProduct:
                     productsController.UpdateProduct("User chose U");
@@ -127,5 +131,20 @@ Today's target achieved: {targetAchieved}
             Price = price,
             Shape = shape
         };
+    }
+
+    private static int GetProductIdInput() 
+    {
+        var productsController = new ProductsController();
+
+        var products = productsController.GetProducts();
+        var productsArray = products.Select(x => x.Name).ToArray();
+        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Choose Product")
+            .AddChoices(productsArray));
+        var id = products.Single(x => x.Name == option).Id;
+
+        return id;
+        
     }
 }

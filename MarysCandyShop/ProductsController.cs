@@ -5,6 +5,7 @@ namespace MarysCandyShop;
 
 internal class ProductsController
 {
+
     internal List<Product> GetProducts()
     {
         var products = new List<Product>();

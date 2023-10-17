@@ -4,7 +4,8 @@ internal class Enums
 {
     internal enum MainMenuOptions
     {
-        ViewProducts,
+        ViewProductsList,
+        ViewSingleProduct,
         AddProduct,
         DeleteProduct,
         UpdateProduct,
