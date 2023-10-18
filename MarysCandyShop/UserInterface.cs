@@ -39,18 +39,21 @@ internal static class UserInterface
                     productsController.AddProduct(product);
                     break;
                 case MainMenuOptions.DeleteProduct:
-                    productsController.DeleteProduct("User chose D");
+                    var productToDelete = GetProductChoiceInput();
+                    productsController.DeleteProduct(productToDelete);
                     break;
                 case MainMenuOptions.ViewProductsList:
                     var products = productsController.GetProducts();
                     ViewProducts(products);
                     break;
                 case MainMenuOptions.ViewSingleProduct:
-                    var productChoice = GetProductIdInput();
-                    ViewProduct(productChoice);
+                    var productToView = GetProductChoiceInput();
+                    ViewProduct(productToView);
                     break;
                 case MainMenuOptions.UpdateProduct:
-                    productsController.UpdateProduct("User chose U");
+                    var productToUpdate = GetProductChoiceInput();
+                    var updatedProduct = GetProductUpdateInput(productToUpdate);
+                    productsController.UpdateProduct(updatedProduct);
                     break;
                 case MainMenuOptions.QuitProgram:
                     menuMessage = "Goodbye";
@@ -70,7 +73,7 @@ internal static class UserInterface
     internal static void ViewProducts(List<Product> products)
     {
         Console.WriteLine(divide);
-        foreach (var product in products)
+        foreach (var product in products.OrderBy(x => x.Id))
         {
             Console.WriteLine(product.GetProductForCsv());
         }
@@ -148,7 +151,7 @@ Today's target achieved: {targetAchieved}
         };
     }
 
-    private static Product GetProductIdInput() 
+    private static Product GetProductChoiceInput()
     {
         var productsController = new ProductsController();
 
@@ -159,6 +162,51 @@ Today's target achieved: {targetAchieved}
             .AddChoices(productsArray));
         var product = products.Single(x => x.Name == option);
 
-        return product;     
+        return product;
+    }
+
+    private static Product GetProductUpdateInput(Product product)
+    {
+        Console.WriteLine("Choose Y/N to update each property. Or simply press Enter or Y.");
+
+        product.Name = AnsiConsole.Confirm("Update name?") ? AnsiConsole.Ask<string>("Product's new name:") : product.Name;
+        product.Price = AnsiConsole.Confirm("Update price?") ? AnsiConsole.Ask<decimal>("Product's new price:") : product.Price;
+
+        var updateType = AnsiConsole.Confirm("Update category?");
+
+        if (updateType)
+        {
+            var type = AnsiConsole.Prompt(
+                new SelectionPrompt<ProductType>()
+                .Title("Product Type:")
+                .AddChoices(
+                    ProductType.Lollipop,
+                    ProductType.ChocolateBar));
+
+            if (type == ProductType.ChocolateBar)
+            {
+                Console.WriteLine("Cocoa %");
+                var cocoa = int.Parse(Console.ReadLine());
+
+                return new ChocolateBar()
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    CocoaPercentage = cocoa
+                };
+            }
+
+            Console.WriteLine("Shape: ");
+            var shape = Console.ReadLine();
+
+            return new Lollipop()
+            {
+                Name = product.Name,
+                Price = product.Price,
+                Shape = shape
+            };
+        }
+
+        return product;
     }
 }

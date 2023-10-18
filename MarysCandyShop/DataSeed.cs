@@ -73,6 +73,5 @@ internal class DataSeed
         };
 
         productsController.AddProducts(productList);
-
     }
 }

@@ -4,8 +4,8 @@ Id,Type,Name,Price,CocoaPercentage,Shape
 3,0,Hazelnut Chocolate Bar,2.99,50
 4,0,White Chocolate Bar,1.79,0
 5,0,Caramel Chocolate Bar,2.29,30
-6,1,Strawberry Lollipop,0.99,,Round
 7,1,Grape Lollipop,0.99,,Heart
 8,1,Blueberry Lollipop,0.99,,Star
 9,1,Orange Lollipop,0.99,,Round
 10,1,Watermelon Lollipop,0.99,,Fish
+6,1,bombons loucos,400,,Round

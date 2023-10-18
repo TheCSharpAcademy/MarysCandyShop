@@ -6,7 +6,6 @@ namespace MarysCandyShop;
 
 internal class ProductsController
 {
-
     internal List<Product> GetProducts()
     {
         var products = new List<Product>();
@@ -60,7 +59,7 @@ internal class ProductsController
         {
             using (StreamWriter outputFile = new StreamWriter(Configuration.docPath, true, new UTF8Encoding(false)))
             {
-                if( outputFile.BaseStream.Length <= 3)
+                if (outputFile.BaseStream.Length <= 3)
                 {
                     outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
                 }
@@ -81,6 +80,8 @@ internal class ProductsController
     {
         try
         {
+            File.WriteAllText(Configuration.docPath, string.Empty);
+
             using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
             {
                 if (outputFile.BaseStream.Length <= 3)
@@ -102,13 +103,22 @@ internal class ProductsController
         }
     }
 
-    internal void DeleteProduct(string message)
+    internal void DeleteProduct(Product product)
     {
-        Console.WriteLine(message);
+        var products = GetProducts();
+
+        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
+
+        AddProducts(updatedProducts);
     }
 
-    internal void UpdateProduct(string message)
+    internal void UpdateProduct(Product product)
     {
-        Console.WriteLine(message);
+        var products = GetProducts();
+
+        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
+        updatedProducts.Add(product);
+
+        AddProducts(updatedProducts);
     }
 }
