@@ -46,7 +46,7 @@ internal static class UserInterface
                     ViewProducts(products);
                     break;
                 case MainMenuOptions.ViewSingleProduct:
-                    var productChoice = GetProductIdInput();
+                    var productChoice = GetProductChoice();
                     ViewProduct(productChoice);
                     break;
                 case MainMenuOptions.UpdateProduct:
@@ -67,19 +67,9 @@ internal static class UserInterface
         }
     }
 
-    internal static void ViewProducts(List<Product> products)
+    private static void ViewProduct(Product productChoice)
     {
-        Console.WriteLine(divide);
-        foreach (var product in products)
-        {
-            Console.WriteLine(product.GetProductForCsv());
-        }
-        Console.WriteLine(divide);
-    }
-
-    internal static void ViewProduct(Product product)
-    {
-        var panel = new Panel(product.GetProductForPanel());
+        var panel = new Panel(productChoice.GetProductForPanel());
         panel.Header = new PanelHeader("Product Info");
         panel.Padding = new Padding(2, 2, 2, 2);
 
@@ -88,6 +78,30 @@ internal static class UserInterface
         Console.WriteLine("Press Any Key to Return to Menu");
         Console.ReadLine();
         Console.Clear();
+    }
+
+    private static Product GetProductChoice()
+    {
+        var productsController = new ProductsController();
+        var products = productsController.GetProducts();
+        var productsArray = products.Select(x => x.Name).ToArray();
+        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("Choose Product")
+            .AddChoices(productsArray));
+
+        var product = products.Single(x => x.Name == option);
+
+        return product;
+    }
+
+    internal static void ViewProducts(List<Product> products)
+    {
+        Console.WriteLine(divide);
+        foreach (var product in products)
+        {
+            Console.WriteLine(product.GetProductForCsv(product.Id));
+        }
+        Console.WriteLine(divide);
     }
 
     internal static void PrintHeader()
@@ -146,19 +160,5 @@ Today's target achieved: {targetAchieved}
             Price = price,
             Shape = shape
         };
-    }
-
-    private static Product GetProductIdInput() 
-    {
-        var productsController = new ProductsController();
-
-        var products = productsController.GetProducts();
-        var productsArray = products.Select(x => x.Name).ToArray();
-        var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title("Choose Product")
-            .AddChoices(productsArray));
-        var product = products.Single(x => x.Name == option);
-
-        return product;     
     }
 }

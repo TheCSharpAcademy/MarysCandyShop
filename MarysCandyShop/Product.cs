@@ -19,22 +19,9 @@ internal abstract class Product
         Id = id;
     }
 
-    internal abstract string GetProductForCsv();
+    internal abstract string GetProductForCsv(int id);
 
     internal abstract string GetProductForPanel();
-
-    internal static Product CreateProductInstance(ProductType productType)
-    {
-        switch (productType)
-        {
-            case ProductType.ChocolateBar:
-                return new ChocolateBar();
-            case ProductType.Lollipop:
-                return new Lollipop();
-            default:
-                throw new ArgumentException("Invalid product type");
-        }
-    }
 
     internal class ChocolateBar : Product
     {
@@ -50,18 +37,18 @@ internal abstract class Product
             Type = ProductType.ChocolateBar;
         }
 
-        internal override string GetProductForCsv()
+        internal override string GetProductForCsv(int id)
         {
-            return $"{Id},{(int)Type},{Name},{Price},{CocoaPercentage}";
+            return $"{id},{(int)Type},{Name},{Price},{CocoaPercentage}";
         }
 
         internal override string GetProductForPanel()
         {
-            return @$"Id: {Id},
-Type: {(int)Type}
-Name: {Name},
+            return $@"Id: {Id}
+Type: {Type}
+Name: {Name}
 Price: {Price}
-CocoaPercentage: {CocoaPercentage}";
+Cocoa Percentage: {CocoaPercentage}";
         }
     }
 
@@ -78,18 +65,19 @@ CocoaPercentage: {CocoaPercentage}";
             Type = ProductType.Lollipop;
         }
 
-        internal override string GetProductForCsv()
+        internal override string GetProductForCsv(int id)
         {
-            return $"{Id},{(int)Type},{Name},{Price},,{Shape}";
+            return $"{id},{(int)Type},{Name},{Price},,{Shape}";
         }
 
         internal override string GetProductForPanel()
         {
-            return @$"Id: {Id},
+            return $@"Id: {Id}
 Type: {Type}
-Name: {Name},
+Name: {Name}
 Price: {Price}
 Shape: {Shape}";
         }
+
     }
 }

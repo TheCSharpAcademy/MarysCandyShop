@@ -54,7 +54,7 @@ internal class ProductsController
 
     internal void AddProduct(Product product)
     {
-        var id = GetProducts().Count;
+        var id = GetProducts().Count + 1;
 
         try
         {
@@ -65,7 +65,7 @@ internal class ProductsController
                     outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
                 }
 
-                var csvLine = product.GetProductForCsv();
+                var csvLine = product.GetProductForCsv(id);
 
                 outputFile.WriteLine(csvLine);
             }
@@ -83,13 +83,12 @@ internal class ProductsController
         {
             using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
             {
-                if (outputFile.BaseStream.Length <= 3)
-                {
-                    outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
-                }
+
+                outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
+
                 foreach (var product in products)
                 {
-                    var csvLine = product.GetProductForCsv();
+                    var csvLine = product.GetProductForCsv(product.Id);
 
                     outputFile.WriteLine(csvLine);
                 }
