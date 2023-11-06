@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.Data.Sqlite;
+using System.Text;
 using static MarysCandyShop.Enums;
 using static MarysCandyShop.Product;
 
@@ -6,7 +7,31 @@ namespace MarysCandyShop;
 
 internal class ProductsController
 {
+    private string ConnectionString { get; } = "Data Source = products.db";
 
+    internal void CreateDatabase()
+    {
+        try
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = @"CREATE TABLE products (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+	Name TEXT NOT NULL,
+	Price REAL NOT NULL,
+	CocoaPercentage INTEGER NULL,
+	Shape TEXT NULL,
+	Type INTEGER NOT NULL
+)";
+            tableCmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
     internal List<Product> GetProducts()
     {
         var products = new List<Product>();
@@ -54,26 +79,18 @@ internal class ProductsController
 
     internal void AddProduct(Product product)
     {
-        var id = GetProducts().Count + 1;
-
         try
         {
-            using (StreamWriter outputFile = new StreamWriter(Configuration.docPath, true, new UTF8Encoding(false)))
-            {
-                if( outputFile.BaseStream.Length <= 3)
-                {
-                    outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
-                }
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
 
-                var csvLine = product.GetProductForCsv(id);
-
-                outputFile.WriteLine(csvLine);
-            }
-            Console.WriteLine("Product saved");
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = $@"INSERT INTO products (name, price, type, cocoaPercentage, shape) VALUES ({product.Name}, {product.Price}, {product.})";
+            tableCmd.ExecuteNonQuery();
         }
         catch (Exception ex)
         {
-            Console.WriteLine("There was an error saving product: " + ex.Message);
+            Console.WriteLine(ex.Message);
         }
     }
 

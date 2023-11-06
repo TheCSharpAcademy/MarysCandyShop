@@ -2,14 +2,14 @@
 
 namespace MarysCandyShop;
 
-internal static class Validation
+public static class Validation
 {
-    internal static bool IsStringValid(string? name)
+    public static bool IsStringValid(string? name)
     {
         return !string.IsNullOrEmpty(name) && name.Length <= 20;
     }
 
-    internal static PriceValidationResponse IsPriceValid(string? priceInput)
+    public static PriceValidationResponse IsPriceValid(string? priceInput)
     {
         var response = new PriceValidationResponse
         {
@@ -34,7 +34,7 @@ internal static class Validation
         return response;
     }
 
-    internal static CocoaValidationResponse IsCocoaValid(string? cocoaInput)
+    public static CocoaValidationResponse IsCocoaValid(string? cocoaInput)
     {
         var response = new CocoaValidationResponse
         {

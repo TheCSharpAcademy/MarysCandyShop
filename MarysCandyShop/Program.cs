@@ -1,6 +1,9 @@
 ﻿using MarysCandyShop;
 
-DataSeed.SeedData();
+//DataSeed.SeedData();
+
+var productsController = new ProductsController();
+productsController.CreateDatabase();
 
 UserInterface.RunMainMenu();
 
