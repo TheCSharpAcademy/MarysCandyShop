@@ -101,13 +101,21 @@ internal class ProductsController
         }
     }
 
-    internal void DeleteProduct(string message)
+    internal void DeleteProduct(Product product)
     {
-        Console.WriteLine(message);
+        var products = GetProducts();
+        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
+
+        AddProducts(updatedProducts);
     }
 
-    internal void UpdateProduct(string message)
+    internal void UpdateProduct(Product product)
     {
-        Console.WriteLine(message);
+        var products = GetProducts();
+
+        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
+        updatedProducts.Add(product);
+
+        AddProducts(updatedProducts);
     }
 }

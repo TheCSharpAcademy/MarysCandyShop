@@ -39,7 +39,8 @@ internal static class UserInterface
                     productsController.AddProduct(product);
                     break;
                 case MainMenuOptions.DeleteProduct:
-                    productsController.DeleteProduct("User chose D");
+                    var productToDelete = GetProductChoice();
+                    productsController.DeleteProduct(productToDelete);
                     break;
                 case MainMenuOptions.ViewProductsList:
                     var products = productsController.GetProducts();
@@ -50,7 +51,9 @@ internal static class UserInterface
                     ViewProduct(productChoice);
                     break;
                 case MainMenuOptions.UpdateProduct:
-                    productsController.UpdateProduct("User chose U");
+                    var productToUpdate = GetProductChoice();
+                    var updatedProduct = GetProductUpdateInput(productToUpdate);
+                    productsController.UpdateProduct(updatedProduct);
                     break;
                 case MainMenuOptions.QuitProgram:
                     menuMessage = "Goodbye";
@@ -65,6 +68,50 @@ internal static class UserInterface
             Console.ReadLine();
             Console.Clear();
         }
+    }
+
+    private static Product GetProductUpdateInput(Product product)
+    {
+        Console.WriteLine("You'll be prompted with the choice to update each property. Press enter for Yes and N for no.");
+
+        product.Name = AnsiConsole.Confirm("Update name?") ? AnsiConsole.Ask<string>("Product's new name:") : product.Name;
+        product.Price = AnsiConsole.Confirm("Update price?") ? AnsiConsole.Ask<decimal>("Product's new price:") : product.Price;
+
+        var updateType = AnsiConsole.Confirm("Update category?");
+
+        if (updateType)
+        {
+            var type = AnsiConsole.Prompt(
+                new SelectionPrompt<ProductType>()
+                .Title("Product Type:")
+                .AddChoices(
+                    ProductType.ChocolateBar,
+                    ProductType.Lollipop));
+            if (type == ProductType.ChocolateBar)
+            {
+                Console.WriteLine("Cocoa %");
+                var cocoa = int.Parse(Console.ReadLine());
+
+                return new ChocolateBar(product.Id)
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    CocoaPercentage = cocoa
+                };
+            }
+
+            Console.WriteLine("Shape: ");
+            var shape = Console.ReadLine();
+
+            return new Lollipop(product.Id)
+            {
+                Name = product.Name,
+                Price = product.Price,
+                Shape = shape
+            };
+        }
+
+        return product;
     }
 
     private static void ViewProduct(Product productChoice)
@@ -125,10 +172,24 @@ Today's target achieved: {targetAchieved}
     private static Product GetProductInput()
     {
         Console.WriteLine("Product name:");
+        
         var name = Console.ReadLine();
+        while (!Validation.IsStringValid(name))
+        {
+            Console.WriteLine("Name cannot be empty or have more than 20 characters. Try again:");
+            name = Console.ReadLine();
+        }
 
         Console.WriteLine("Product price:");
-        var price = decimal.Parse(Console.ReadLine());
+        var priceInput = Console.ReadLine();
+        var priceValidation = Validation.IsPriceValid(priceInput);
+
+        while (!priceValidation.IsValid)
+        {
+            Console.WriteLine(priceValidation.ErrorMessage);
+            priceInput = Console.ReadLine();
+            priceValidation = Validation.IsPriceValid(priceInput);
+        }
 
         var type = AnsiConsole.Prompt(
             new SelectionPrompt<ProductType>()
@@ -141,23 +202,37 @@ Today's target achieved: {targetAchieved}
         if (type == ProductType.ChocolateBar)
         {
             Console.WriteLine("Cocoa %");
-            var cocoa = int.Parse(Console.ReadLine());
+            var cocoaInput = Console.ReadLine();
+            var cocoaValidation = Validation.IsCocoaValid(cocoaInput);
+
+            while (!cocoaValidation.IsValid)
+            {
+                Console.WriteLine(cocoaValidation.ErrorMessage);
+                cocoaInput = Console.ReadLine();
+                cocoaValidation = Validation.IsCocoaValid(cocoaInput);
+            }
 
             return new ChocolateBar()
             {
                 Name = name,
-                Price = price,
-                CocoaPercentage = cocoa
+                Price = priceValidation.Price,
+                CocoaPercentage = cocoaValidation.CocoaPercentage
             };
         }
 
         Console.WriteLine("Shape: ");
         var shape = Console.ReadLine();
 
+        while (!Validation.IsStringValid(shape))
+        {
+            Console.WriteLine("Shape cannot be empty or have more than 20 characters. Try again:");
+            shape = Console.ReadLine();
+        }
+
         return new Lollipop
         {
             Name = name,
-            Price = price,
+            Price = priceValidation.Price,
             Shape = shape
         };
     }
