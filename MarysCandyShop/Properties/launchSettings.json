@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MarysCandyShop": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\The.Csharp.School\\MarysCandyShop\\MarysCandyShop\\"
+    }
+  }
+}

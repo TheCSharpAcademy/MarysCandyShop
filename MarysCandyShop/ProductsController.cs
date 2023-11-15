@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.Data.Sqlite;
+using System.Text;
 using static MarysCandyShop.Enums;
 using static MarysCandyShop.Product;
 
@@ -6,7 +7,31 @@ namespace MarysCandyShop;
 
 internal class ProductsController
 {
+    private string ConnectionString { get; } = "Data Source = products.db";
 
+    internal void CreateDatabase()
+    {
+        try
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = @"CREATE TABLE products (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+	Name TEXT NOT NULL,
+	Price REAL NOT NULL,
+	CocoaPercentage INTEGER NULL,
+	Shape TEXT NULL,
+	Type INTEGER NOT NULL
+)";
+            tableCmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
     internal List<Product> GetProducts()
     {
         var products = new List<Product>();
