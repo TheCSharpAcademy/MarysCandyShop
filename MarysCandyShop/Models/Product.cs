@@ -21,6 +21,8 @@ internal abstract class Product
 
     internal abstract string GetProductForCsv(int id);
 
+    internal abstract string GetInsertQuery();
+
     internal abstract string GetProductForPanel();
 
     internal class ChocolateBar : Product
@@ -49,6 +51,11 @@ Type: {Type}
 Name: {Name}
 Price: {Price}
 Cocoa Percentage: {CocoaPercentage}";
+        }
+
+        internal override string GetInsertQuery()
+        {
+            return $@"INSERT INTO products (name, price, type, cocoaPercentage) VALUES ('{Name}', {Price}, {(int)Type}, {CocoaPercentage})";
         }
     }
 
@@ -79,5 +86,9 @@ Price: {Price}
 Shape: {Shape}";
         }
 
+        internal override string GetInsertQuery()
+        {
+            return $@"INSERT INTO products (name, price, type, shape) VALUES ('{Name}', {Price}, {(int)Type}, {Shape})";
+        }
     }
 }
