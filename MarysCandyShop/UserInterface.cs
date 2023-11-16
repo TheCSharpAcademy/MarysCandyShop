@@ -143,12 +143,20 @@ internal static class UserInterface
 
     internal static void ViewProducts(List<Product> products)
     {
-        Console.WriteLine(divide);
+        var table = new Table();
+        table.AddColumn("Id");
+        table.AddColumn("Type");
+        table.AddColumn("Name");
+        table.AddColumn("Price");
+        table.AddColumn("CocoaPercentage");
+        table.AddColumn("Shape");
+        
         foreach (var product in products)
         {
-            Console.WriteLine(product.GetProductForCsv(product.Id));
+            table.AddRow(product.GetColumnsArray(product));
         }
-        Console.WriteLine(divide);
+
+        AnsiConsole.Write(table);
     }
 
     internal static void PrintHeader()

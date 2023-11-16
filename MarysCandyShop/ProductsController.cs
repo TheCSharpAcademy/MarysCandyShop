@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Text;
-using static MarysCandyShop.Enums;
 using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
@@ -38,33 +37,35 @@ internal class ProductsController
 
         try
         {
-            using (StreamReader reader = new(Configuration.docPath))
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = "SELECT * FROM products";
+
+            using var reader = tableCmd.ExecuteReader();
+            if (reader.HasRows)
             {
-                reader.ReadLine(); //discard first line
-                var line = reader.ReadLine();
-
-                while (line != null)
+                while (reader.Read())
                 {
-                    string[] parts = line.Split(',');
-
-                    if (int.Parse(parts[1]) == (int)ProductType.ChocolateBar)
+                    if (reader.GetInt32(5) == 0)
                     {
-                        var product = new ChocolateBar(int.Parse(parts[0]));
-                        product.Name = parts[2];
-                        product.Price = decimal.Parse(parts[3]);
-                        product.CocoaPercentage = int.Parse(parts[4]);
-                        products.Add(product);
-                    }
+                        products.Add(new ChocolateBar(reader.GetInt32(0))
+                        {
+                            Name = reader.GetString(1),
+                            Price = reader.GetDecimal(2),
+                            CocoaPercentage = reader.GetInt32(3)
+                        });
+                    } 
                     else
                     {
-                        var product = new Lollipop(int.Parse(parts[0]));
-                        product.Name = parts[2];
-                        product.Price = decimal.Parse(parts[3]);
-                        product.Shape = parts[5];
-                        products.Add(product);
+                        products.Add(new Lollipop(reader.GetInt32(0))
+                        {
+                            Name = reader.GetString(1),
+                            Price = reader.GetDecimal(2),
+                            Shape = reader.GetString(3)
+                        });
                     }
-
-                    line = reader.ReadLine();
                 }
             }
         }
@@ -79,21 +80,17 @@ internal class ProductsController
 
     internal void AddProduct(Product product)
     {
-        var id = GetProducts().Count + 1;
-
         try
         {
-            using (StreamWriter outputFile = new StreamWriter(Configuration.docPath, true, new UTF8Encoding(false)))
-            {
-                if( outputFile.BaseStream.Length <= 3)
-                {
-                    outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
-                }
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            using var tableCmd = connection.CreateCommand();
 
-                var csvLine = product.GetProductForCsv(id);
+            tableCmd.CommandText = product.GetInsertQuery();
+            product.AddParameters(tableCmd);
 
-                outputFile.WriteLine(csvLine);
-            }
+            tableCmd.ExecuteNonQuery();
+
             Console.WriteLine("Product saved");
         }
         catch (Exception ex)
@@ -113,9 +110,9 @@ internal class ProductsController
 
                 foreach (var product in products)
                 {
-                    var csvLine = product.GetProductForCsv(product.Id);
+                    //var csvLine = product.GetProductForCsv(product.Id);
 
-                    outputFile.WriteLine(csvLine);
+                    //outputFile.WriteLine(csvLine);
                 }
             }
             Console.WriteLine("Products saved");
