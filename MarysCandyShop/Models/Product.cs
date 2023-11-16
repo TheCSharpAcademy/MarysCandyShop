@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
+using Spectre.Console;
 using static MarysCandyShop.Enums;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MarysCandyShop;
 
@@ -25,6 +27,8 @@ internal abstract class Product
     internal abstract string GetProductForPanel();
 
     internal abstract string GetInsertQuery();
+
+    internal abstract string GetUpdateQuery();
 
     internal abstract void AddParameters(SqliteCommand cmd);
 
@@ -73,6 +77,11 @@ Cocoa Percentage: {CocoaPercentage}";
             cmd.Parameters.AddWithValue("@Type", (int)Type);
             cmd.Parameters.AddWithValue("@CocoaPercentage", CocoaPercentage);
         }
+
+        internal override string GetUpdateQuery()
+        {
+            return $"UPDATE products SET name = @Name, price = @Price, type = 0, cocoapercentage = @CocoaPercentage WHERE Id = {Id}";
+        }
     }
 
     internal class Lollipop : Product
@@ -118,6 +127,12 @@ Shape: {Shape}";
             cmd.Parameters.AddWithValue("@Price", Price);
             cmd.Parameters.AddWithValue("@Type", (int)Type);
             cmd.Parameters.AddWithValue("@Shape", Shape);
+        }
+
+        internal override string GetUpdateQuery()
+        {
+            return $"" +
+                $"UPDATE products SET name = @Name, price = @Price, type = 1, shape = @Shape WHERE Id = {Id}";
         }
 
     }

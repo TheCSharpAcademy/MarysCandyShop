@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Text;
 using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
@@ -56,14 +55,14 @@ internal class ProductsController
                             Price = reader.GetDecimal(2),
                             CocoaPercentage = reader.GetInt32(3)
                         });
-                    } 
+                    }
                     else
                     {
                         products.Add(new Lollipop(reader.GetInt32(0))
                         {
                             Name = reader.GetString(1),
                             Price = reader.GetDecimal(2),
-                            Shape = reader.GetString(3)
+                            Shape = reader.GetString(4)
                         });
                     }
                 }
@@ -125,19 +124,39 @@ internal class ProductsController
 
     internal void DeleteProduct(Product product)
     {
-        var products = GetProducts();
-        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
+        try
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
 
-        AddProducts(updatedProducts);
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = $"DELETE FROM products WHERE Id = {product.Id}";
+
+            tableCmd.ExecuteNonQuery();
+        }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine("There was an error deleting the product: " + ex.Message);
+        }
     }
 
     internal void UpdateProduct(Product product)
     {
-        var products = GetProducts();
+        try
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
 
-        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
-        updatedProducts.Add(product);
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = product.GetUpdateQuery();
 
-        AddProducts(updatedProducts);
+            product.AddParameters(tableCmd);
+
+            tableCmd.ExecuteNonQuery();
+        }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine("There was an error deleting the product: " + ex.Message);
+        }
     }
 }

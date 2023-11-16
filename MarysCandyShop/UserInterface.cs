@@ -79,37 +79,40 @@ internal static class UserInterface
 
         var updateType = AnsiConsole.Confirm("Update category?");
 
+        var type = ProductType.ChocolateBar;
+
         if (updateType)
         {
-            var type = AnsiConsole.Prompt(
+            type = AnsiConsole.Prompt(
                 new SelectionPrompt<ProductType>()
                 .Title("Product Type:")
                 .AddChoices(
                     ProductType.ChocolateBar,
                     ProductType.Lollipop));
-            if (type == ProductType.ChocolateBar)
-            {
-                Console.WriteLine("Cocoa %");
-                var cocoa = int.Parse(Console.ReadLine());
+        }
 
-                return new ChocolateBar(product.Id)
-                {
-                    Name = product.Name,
-                    Price = product.Price,
-                    CocoaPercentage = cocoa
-                };
-            }
+        if (type == ProductType.ChocolateBar)
+        {
+            Console.WriteLine("Cocoa %");
+            var cocoa = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Shape: ");
-            var shape = Console.ReadLine();
-
-            return new Lollipop(product.Id)
+            return new ChocolateBar(product.Id)
             {
                 Name = product.Name,
                 Price = product.Price,
-                Shape = shape
+                CocoaPercentage = cocoa
             };
         }
+
+        Console.WriteLine("Shape: ");
+        var shape = Console.ReadLine();
+
+        return new Lollipop(product.Id)
+        {
+            Name = product.Name,
+            Price = product.Price,
+            Shape = shape
+        };
 
         return product;
     }
@@ -150,7 +153,7 @@ internal static class UserInterface
         table.AddColumn("Price");
         table.AddColumn("CocoaPercentage");
         table.AddColumn("Shape");
-        
+
         foreach (var product in products)
         {
             table.AddRow(product.GetColumnsArray(product));
@@ -180,7 +183,7 @@ Today's target achieved: {targetAchieved}
     private static Product GetProductInput()
     {
         Console.WriteLine("Product name:");
-        
+
         var name = Console.ReadLine();
         while (!Validation.IsStringValid(name))
         {
