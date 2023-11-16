@@ -76,7 +76,7 @@ internal class ProductsController
         return products;
     }
 
-    internal void AddProduct(Product product)
+    internal void AddProduct(Product product) 
     {
         try
         {
@@ -85,6 +85,9 @@ internal class ProductsController
 
             using var tableCmd = connection.CreateCommand();
             tableCmd.CommandText = product.GetInsertQuery();
+            product.AddParameters(tableCmd);
+
+            Console.WriteLine(tableCmd.CommandText);
             tableCmd.ExecuteNonQuery();
         }
         catch (Exception ex)
@@ -99,7 +102,6 @@ internal class ProductsController
         {
             using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
             {
-
                 outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
 
                 foreach (var product in products)

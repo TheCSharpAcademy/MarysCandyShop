@@ -1,4 +1,5 @@
-﻿using static MarysCandyShop.Enums;
+﻿using Microsoft.Data.Sqlite;
+using static MarysCandyShop.Enums;
 
 namespace MarysCandyShop;
 
@@ -22,6 +23,8 @@ internal abstract class Product
     internal abstract string GetProductForCsv(int id);
 
     internal abstract string GetInsertQuery();
+
+    internal abstract void AddParameters(SqliteCommand cmd);
 
     internal abstract string GetProductForPanel();
 
@@ -55,7 +58,15 @@ Cocoa Percentage: {CocoaPercentage}";
 
         internal override string GetInsertQuery()
         {
-            return $@"INSERT INTO products (name, price, type, cocoaPercentage) VALUES ('{Name}', {Price}, {(int)Type}, {CocoaPercentage})";
+            return $@"INSERT INTO products (name, price, type, cocoaPercentage) VALUES (@Name, @Price, @Type, @CocoaPercentage)";
+        }
+
+        internal override void AddParameters(SqliteCommand cmd)
+        {
+            cmd.Parameters.AddWithValue("@Name", Name);
+            cmd.Parameters.AddWithValue("@Price", Price);
+            cmd.Parameters.AddWithValue("@Type", (int)Type);
+            cmd.Parameters.AddWithValue("@CocoaPercentage", CocoaPercentage);
         }
     }
 
@@ -88,7 +99,15 @@ Shape: {Shape}";
 
         internal override string GetInsertQuery()
         {
-            return $@"INSERT INTO products (name, price, type, shape) VALUES ('{Name}', {Price}, {(int)Type}, {Shape})";
+            return $@"INSERT INTO products (name, price, type, shape) VALUES (@Name, @Price, @Type, @Shape)";
+        }
+
+        internal override void AddParameters(SqliteCommand cmd)
+        {
+            cmd.Parameters.AddWithValue("@Name", Name);
+            cmd.Parameters.AddWithValue("@Price", Price);
+            cmd.Parameters.AddWithValue("@Type", (int)Type);
+            cmd.Parameters.AddWithValue("@Shape", Shape);
         }
     }
 }
