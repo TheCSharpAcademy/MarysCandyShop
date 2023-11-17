@@ -3,11 +3,21 @@ using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
 
-internal class ProductsController
+public interface IProductsController
+{
+    void CreateDatabase();
+    List<Product> GetProducts();
+    void AddProduct(Product product);
+    void AddProducts(List<Product> products);
+    void DeleteProduct(Product product);
+    void UpdateProduct(Product product);
+}
+
+public class ProductsController: IProductsController
 {
     private string ConnectionString { get; } = "Data Source = products.db";
 
-    internal void CreateDatabase()
+    public void CreateDatabase()
     {
         try
         {
@@ -30,7 +40,7 @@ internal class ProductsController
             Console.WriteLine(ex.Message);
         }
     }
-    internal List<Product> GetProducts()
+    public List<Product> GetProducts()
     {
         var products = new List<Product>();
 
@@ -77,7 +87,7 @@ internal class ProductsController
         return products;
     }
 
-    internal void AddProduct(Product product)
+    public void AddProduct(Product product)
     {
         try
         {
@@ -98,7 +108,7 @@ internal class ProductsController
         }
     }
 
-    internal void AddProducts(List<Product> products)
+    public void AddProducts(List<Product> products)
     {
         try
         {
@@ -122,7 +132,7 @@ internal class ProductsController
         }
     }
 
-    internal void DeleteProduct(Product product)
+    public void DeleteProduct(Product product)
     {
         try
         {
@@ -140,7 +150,7 @@ internal class ProductsController
         }
     }
 
-    internal void UpdateProduct(Product product)
+    public void UpdateProduct(Product product)
     {
         try
         {
