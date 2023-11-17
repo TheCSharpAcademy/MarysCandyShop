@@ -6,7 +6,7 @@ internal class DataSeed
 {
     internal static void SeedData()
     {
-        var productsController = new ProductsController();
+        //var productsController = new ProductsController();
 
         List<Product> productList = new List<Product>
         {
@@ -72,7 +72,7 @@ internal class DataSeed
             }
         };
 
-        productsController.AddProducts(productList);
+        //productsController.AddProducts(productList);
 
     }
 }

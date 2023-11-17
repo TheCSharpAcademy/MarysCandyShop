@@ -1,6 +1,6 @@
 ﻿namespace MarysCandyShop;
 
-internal static class Configuration
+public sealed class Configuration
 {
-    internal static string docPath = @"C:\The.Csharp.School\MarysCandyShop\MarysCandyShop\products.csv";
+    public string ConnectionString { get; set; }
 }

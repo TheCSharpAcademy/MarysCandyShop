@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace MarysCandyShop;
 
-internal class Enums
+public class Enums
 {
-    internal enum MainMenuOptions
+    public enum MainMenuOptions
     {
         ViewProductsList,
         ViewSingleProduct,
@@ -15,7 +14,7 @@ internal class Enums
         QuitProgram
     }
 
-    internal enum ProductType
+    public enum ProductType
     {
         [Display(Name = "Chocolate Bar")]
         ChocolateBar,

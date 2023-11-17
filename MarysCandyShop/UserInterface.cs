@@ -4,13 +4,18 @@ using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
 
-internal static class UserInterface
+public class UserInterface
 {
-    internal const string divide = "---------------------------------";
+    private readonly IProductsController _productsController;
 
-    internal static void RunMainMenu()
+    public UserInterface(IProductsController productsController)
     {
-        var productsController = new ProductsController();
+        _productsController = productsController;
+    }
+
+    public void RunMainMenu()
+    {
+        _productsController.CreateDatabase();
 
         var isMenuRunning = true;
 
@@ -36,14 +41,14 @@ internal static class UserInterface
             {
                 case MainMenuOptions.AddProduct:
                     var product = GetProductInput();
-                    productsController.AddProduct(product);
+                    _productsController.AddProduct(product);
                     break;
                 case MainMenuOptions.DeleteProduct:
                     var productToDelete = GetProductChoice();
-                    productsController.DeleteProduct(productToDelete);
+                    _productsController.DeleteProduct(productToDelete);
                     break;
                 case MainMenuOptions.ViewProductsList:
-                    var products = productsController.GetProducts();
+                    var products = _productsController.GetProducts();
                     ViewProducts(products);
                     break;
                 case MainMenuOptions.ViewSingleProduct:
@@ -53,7 +58,7 @@ internal static class UserInterface
                 case MainMenuOptions.UpdateProduct:
                     var productToUpdate = GetProductChoice();
                     var updatedProduct = GetProductUpdateInput(productToUpdate);
-                    productsController.UpdateProduct(updatedProduct);
+                    _productsController.UpdateProduct(updatedProduct);
                     break;
                 case MainMenuOptions.QuitProgram:
                     menuMessage = "Goodbye";
@@ -79,37 +84,39 @@ internal static class UserInterface
 
         var updateType = AnsiConsole.Confirm("Update category?");
 
+        var type = ProductType.ChocolateBar;
         if (updateType)
         {
-            var type = AnsiConsole.Prompt(
+                type = AnsiConsole.Prompt(
                 new SelectionPrompt<ProductType>()
                 .Title("Product Type:")
                 .AddChoices(
                     ProductType.ChocolateBar,
                     ProductType.Lollipop));
-            if (type == ProductType.ChocolateBar)
-            {
-                Console.WriteLine("Cocoa %");
-                var cocoa = int.Parse(Console.ReadLine());
+        }
 
-                return new ChocolateBar(product.Id)
-                {
-                    Name = product.Name,
-                    Price = product.Price,
-                    CocoaPercentage = cocoa
-                };
-            }
+        if (type == ProductType.ChocolateBar)
+        {
+            Console.WriteLine("Cocoa %");
+            var cocoa = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Shape: ");
-            var shape = Console.ReadLine();
-
-            return new Lollipop(product.Id)
+            return new ChocolateBar(product.Id)
             {
                 Name = product.Name,
                 Price = product.Price,
-                Shape = shape
+                CocoaPercentage = cocoa
             };
         }
+
+        Console.WriteLine("Shape: ");
+        var shape = Console.ReadLine();
+
+        return new Lollipop(product.Id)
+        {
+            Name = product.Name,
+            Price = product.Price,
+            Shape = shape
+        };
 
         return product;
     }
@@ -127,10 +134,9 @@ internal static class UserInterface
         Console.Clear();
     }
 
-    private static Product GetProductChoice()
+    private Product GetProductChoice()
     {
-        var productsController = new ProductsController();
-        var products = productsController.GetProducts();
+        var products = _productsController.GetProducts();
         var productsArray = products.Select(x => x.Name).ToArray();
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Choose Product")
@@ -141,7 +147,7 @@ internal static class UserInterface
         return product;
     }
 
-    internal static void ViewProducts(List<Product> products)
+    public void ViewProducts(List<Product> products)
     {
         var table = new Table();
         table.AddColumn("Id");
@@ -159,7 +165,7 @@ internal static class UserInterface
         AnsiConsole.Write(table);
     }
 
-    internal static void PrintHeader()
+    public static void PrintHeader()
     {
         var title = "Mary's Candy Shop";
         var divide = "---------------------------------";

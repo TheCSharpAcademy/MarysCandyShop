@@ -1,14 +1,29 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Text;
+using Microsoft.Extensions.Options;
 using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
 
-internal class ProductsController
+public interface IProductsController
 {
-    private string ConnectionString { get; } = "Data Source = products.db";
+    void CreateDatabase();
+    List<Product> GetProducts();
+    void AddProduct(Product product);
+    void AddProducts(List<Product> products);
+    void DeleteProduct(Product product);
+    void UpdateProduct(Product product);
+}
 
-    internal void CreateDatabase()
+public class ProductsController: IProductsController
+{
+    private readonly string ConnectionString;
+
+    public ProductsController(IOptions<Configuration> options)
+    {
+        ConnectionString = options.Value.ConnectionString;
+    }
+
+    public void CreateDatabase()
     {
         try
         {
@@ -31,7 +46,7 @@ internal class ProductsController
             Console.WriteLine(ex.Message);
         }
     }
-    internal List<Product> GetProducts()
+    public List<Product> GetProducts()
     {
         var products = new List<Product>();
 
@@ -56,14 +71,14 @@ internal class ProductsController
                             Price = reader.GetDecimal(2),
                             CocoaPercentage = reader.GetInt32(3)
                         });
-                    } 
+                    }
                     else
                     {
                         products.Add(new Lollipop(reader.GetInt32(0))
                         {
                             Name = reader.GetString(1),
                             Price = reader.GetDecimal(2),
-                            Shape = reader.GetString(3)
+                            Shape = reader.GetString(4)
                         });
                     }
                 }
@@ -72,13 +87,13 @@ internal class ProductsController
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Console.WriteLine(UserInterface.divide);
+            Console.WriteLine("--------------");
         }
 
         return products;
     }
 
-    internal void AddProduct(Product product)
+    public void AddProduct(Product product)
     {
         try
         {
@@ -99,45 +114,67 @@ internal class ProductsController
         }
     }
 
-    internal void AddProducts(List<Product> products)
+    public void AddProducts(List<Product> products)
+    {
+        //try
+        //{
+        //    using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
+        //    {
+
+        //        outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
+
+        //        foreach (var product in products)
+        //        {
+        //            //var csvLine = product.GetProductForCsv(product.Id);
+
+        //            //outputFile.WriteLine(csvLine);
+        //        }
+        //    }
+        //    Console.WriteLine("Products saved");
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine("There was an error saving products: " + ex.Message);
+        //}
+    }
+
+    public void DeleteProduct(Product product)
     {
         try
         {
-            using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
-            {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
 
-                outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
+            using var tableCmd = connection.CreateCommand();
+            tableCmd.CommandText = $"DELETE FROM products WHERE Id = {product.Id}";
 
-                foreach (var product in products)
-                {
-                    //var csvLine = product.GetProductForCsv(product.Id);
+            tableCmd.ExecuteNonQuery();
 
-                    //outputFile.WriteLine(csvLine);
-                }
-            }
-            Console.WriteLine("Products saved");
+        }
+        catch (SqliteException ex)
+        {
+            Console.WriteLine("There was an error deleting the product: " + ex.Message);
+        }
+    }
+
+    public void UpdateProduct(Product product)
+    {
+        try
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            using var tableCmd = connection.CreateCommand();
+
+            tableCmd.CommandText = product.GetUpdateQuery();
+            product.AddParameters(tableCmd);
+
+            tableCmd.ExecuteNonQuery();
+
+            Console.WriteLine("Product saved");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("There was an error saving products: " + ex.Message);
+            Console.WriteLine("There was an error updating product: " + ex.Message);
         }
-    }
-
-    internal void DeleteProduct(Product product)
-    {
-        var products = GetProducts();
-        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
-
-        AddProducts(updatedProducts);
-    }
-
-    internal void UpdateProduct(Product product)
-    {
-        var products = GetProducts();
-
-        var updatedProducts = products.Where(p => p.Id != product.Id).ToList();
-        updatedProducts.Add(product);
-
-        AddProducts(updatedProducts);
     }
 }
