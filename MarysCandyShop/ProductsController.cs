@@ -17,6 +17,11 @@ public class ProductsController: IProductsController
 {
     private string ConnectionString { get; } = "Data Source = products.db";
 
+    public ProductsController()
+    {
+        CreateDatabase();
+    }
+
     public void CreateDatabase()
     {
         try
@@ -81,7 +86,6 @@ public class ProductsController: IProductsController
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Console.WriteLine(UserInterface.divide);
         }
 
         return products;

@@ -4,14 +4,17 @@ using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
 
-internal static class UserInterface
+internal class UserInterface
 {
-    internal const string divide = "---------------------------------";
+    private readonly IProductsController _productsController;
 
-    internal static void RunMainMenu()
+    public UserInterface(IProductsController productsController)
     {
-        var productsController = new ProductsController();
+        _productsController = productsController;
+    }
 
+    internal void RunMainMenu()
+    {
         var isMenuRunning = true;
 
         while (isMenuRunning)
@@ -36,14 +39,14 @@ internal static class UserInterface
             {
                 case MainMenuOptions.AddProduct:
                     var product = GetProductInput();
-                    productsController.AddProduct(product);
+                    _productsController.AddProduct(product);
                     break;
                 case MainMenuOptions.DeleteProduct:
                     var productToDelete = GetProductChoice();
-                    productsController.DeleteProduct(productToDelete);
+                    _productsController.DeleteProduct(productToDelete);
                     break;
                 case MainMenuOptions.ViewProductsList:
-                    var products = productsController.GetProducts();
+                    var products = _productsController.GetProducts();
                     ViewProducts(products);
                     break;
                 case MainMenuOptions.ViewSingleProduct:
@@ -53,7 +56,7 @@ internal static class UserInterface
                 case MainMenuOptions.UpdateProduct:
                     var productToUpdate = GetProductChoice();
                     var updatedProduct = GetProductUpdateInput(productToUpdate);
-                    productsController.UpdateProduct(updatedProduct);
+                    _productsController.UpdateProduct(updatedProduct);
                     break;
                 case MainMenuOptions.QuitProgram:
                     menuMessage = "Goodbye";
@@ -70,7 +73,7 @@ internal static class UserInterface
         }
     }
 
-    private static Product GetProductUpdateInput(Product product)
+    private Product GetProductUpdateInput(Product product)
     {
         Console.WriteLine("You'll be prompted with the choice to update each property. Press enter for Yes and N for no.");
 
@@ -117,7 +120,7 @@ internal static class UserInterface
         return product;
     }
 
-    private static void ViewProduct(Product productChoice)
+    private void ViewProduct(Product productChoice)
     {
         var panel = new Panel(productChoice.GetProductForPanel());
         panel.Header = new PanelHeader("Product Info");
@@ -130,10 +133,9 @@ internal static class UserInterface
         Console.Clear();
     }
 
-    private static Product GetProductChoice()
+    private Product GetProductChoice()
     {
-        var productsController = new ProductsController();
-        var products = productsController.GetProducts();
+        var products = _productsController.GetProducts();
         var productsArray = products.Select(x => x.Name).ToArray();
         var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
             .Title("Choose Product")
