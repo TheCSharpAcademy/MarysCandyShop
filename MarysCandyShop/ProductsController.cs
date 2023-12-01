@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Options;
 using static MarysCandyShop.Product;
 
 namespace MarysCandyShop;
@@ -15,10 +16,11 @@ public interface IProductsController
 
 public class ProductsController: IProductsController
 {
-    private string ConnectionString { get; } = "Data Source = products.db";
+    private readonly Configuration Configuration;
 
-    public ProductsController()
+    public ProductsController(IOptions<Configuration> configuration)
     {
+        Configuration = configuration.Value;
         CreateDatabase();
     }
 
@@ -26,7 +28,7 @@ public class ProductsController: IProductsController
     {
         try
         {
-            using var connection = new SqliteConnection(ConnectionString);
+            using var connection = new SqliteConnection(Configuration.ConnectionString);
             connection.Open();
 
             using var tableCmd = connection.CreateCommand();
@@ -51,7 +53,7 @@ public class ProductsController: IProductsController
 
         try
         {
-            using var connection = new SqliteConnection(ConnectionString);
+            using var connection = new SqliteConnection(Configuration.ConnectionString);
             connection.Open();
 
             using var tableCmd = connection.CreateCommand();
@@ -95,7 +97,7 @@ public class ProductsController: IProductsController
     {
         try
         {
-            using var connection = new SqliteConnection(ConnectionString);
+            using var connection = new SqliteConnection(Configuration.ConnectionString);
             connection.Open();
             using var tableCmd = connection.CreateCommand();
 
@@ -114,33 +116,33 @@ public class ProductsController: IProductsController
 
     public void AddProducts(List<Product> products)
     {
-        try
-        {
-            using (StreamWriter outputFile = new StreamWriter(Configuration.docPath))
-            {
+        //try
+        //{
+        //    using (StreamWriter outputFile = new StreamWriter(Configuration.ConnectionString))
+        //    {
 
-                outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
+        //        outputFile.WriteLine("Id,Type,Name,Price,CocoaPercentage,Shape");
 
-                foreach (var product in products)
-                {
-                    //var csvLine = product.GetProductForCsv(product.Id);
+        //        foreach (var product in products)
+        //        {
+        //            //var csvLine = product.GetProductForCsv(product.Id);
 
-                    //outputFile.WriteLine(csvLine);
-                }
-            }
-            Console.WriteLine("Products saved");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("There was an error saving products: " + ex.Message);
-        }
+        //            //outputFile.WriteLine(csvLine);
+        //        }
+        //    }
+        //    Console.WriteLine("Products saved");
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine("There was an error saving products: " + ex.Message);
+        //}
     }
 
     public void DeleteProduct(Product product)
     {
         try
         {
-            using var connection = new SqliteConnection(ConnectionString);
+            using var connection = new SqliteConnection(Configuration.ConnectionString);
             connection.Open();
 
             using var tableCmd = connection.CreateCommand();
@@ -158,7 +160,7 @@ public class ProductsController: IProductsController
     {
         try
         {
-            using var connection = new SqliteConnection(ConnectionString);
+            using var connection = new SqliteConnection(Configuration.ConnectionString);
             connection.Open();
 
             using var tableCmd = connection.CreateCommand();
